@@ -11,7 +11,7 @@
   to = "/.netlify/functions/:splat"
   status = 200
   force = true
-  headers = { Access-Control-Allow-Origin = "*" }
+  headers = { Access-Control-Allow-Origin = "*", Access-Control-Allow-Methods = "GET,POST,OPTIONS", Access-Control-Allow-Headers = "Content-Type" }
 
 [[redirects]]
   from = "/*"
@@ -23,6 +23,7 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
   external_node_modules = ["openai"]
+  included_files = ["netlify/functions/**/*"]
 
 [dev]
   command = "npm run dev"

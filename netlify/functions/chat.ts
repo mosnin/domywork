@@ -20,7 +20,8 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
+// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+export const handler = async (event: HandlerEvent): Promise<HandlerResponse> => {
   const requestId = crypto.randomBytes(4).toString('hex');
   console.log(`[${requestId}] Received ${event.httpMethod} request to ${event.path}`);
 
@@ -83,7 +84,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     try {
       console.log(`[${requestId}] Testing OpenAI connection...`);
       await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-4o",
         messages: [{ role: "user", content: "test" }],
         max_tokens: 5
       });
@@ -102,7 +103,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
 
     console.log(`[${requestId}] Processing chat request:`, { context });
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",

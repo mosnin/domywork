@@ -1,5 +1,5 @@
 const API_BASE = import.meta.env.PROD 
-  ? "/.netlify/functions"  // In production, use Netlify Functions path
+  ? "/.netlify/functions"  // In production, use Netlify Functions path directly
   : "/api";               // In development, use local API
 
 export async function sendChatMessage(message: string, context?: string) {
@@ -15,6 +15,7 @@ export async function sendChatMessage(message: string, context?: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ message, context }),
+      credentials: "omit" // Don't send credentials for cross-origin requests
     });
 
     if (!response.ok) {
@@ -23,6 +24,7 @@ export async function sendChatMessage(message: string, context?: string) {
         status: response.status,
         statusText: response.statusText,
         error: errorText,
+        endpoint
       });
       throw new Error(`Chat API error: ${response.status} - ${errorText}`);
     }
