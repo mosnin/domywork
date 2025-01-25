@@ -25,14 +25,31 @@ export default function Snake() {
     canvas.height = 400;
 
     const GRID_SIZE = 20;
-    const INITIAL_SPEED = 150;
+    const GRID_WIDTH = Math.floor(canvas.width / GRID_SIZE);
+    const GRID_HEIGHT = Math.floor(canvas.height / GRID_SIZE);
+    const INITIAL_SPEED = 200; // Slower initial speed
+
     let gameSpeed = INITIAL_SPEED;
     let lastRenderTime = 0;
-    let snake: Point[] = [{ x: 10, y: 10 }];
-    let food: Point = { x: 15, y: 15 };
+    let snake: Point[] = [
+      { x: Math.floor(GRID_WIDTH / 2), y: Math.floor(GRID_HEIGHT / 2) }
+    ];
+    let food: Point = getRandomFoodPosition();
     let direction: Point = { x: 0, y: 0 };
     let newDirection: Point = { x: 0, y: 0 };
     let currentScore = 0;
+    let gameStarted = false;
+
+    function getRandomFoodPosition(): Point {
+      let position: Point;
+      do {
+        position = {
+          x: Math.floor(Math.random() * GRID_WIDTH),
+          y: Math.floor(Math.random() * GRID_HEIGHT)
+        };
+      } while (snake.some(segment => segment.x === position.x && segment.y === position.y));
+      return position;
+    }
 
     function gameLoop(currentTime: number) {
       if (gameOver) return;
@@ -44,27 +61,42 @@ export default function Snake() {
       }
 
       lastRenderTime = currentTime;
+
+      if (!gameStarted) {
+        draw();
+        requestAnimationFrame(gameLoop);
+        return;
+      }
+
       update();
       draw();
       requestAnimationFrame(gameLoop);
     }
 
     function update() {
-      direction = newDirection;
+      // Copy current direction if movement has started
+      if (direction.x !== 0 || direction.y !== 0) {
+        direction = { ...newDirection };
+      }
+
+      if (direction.x === 0 && direction.y === 0) {
+        return; // Don't update if not moving
+      }
+
       const newHead = {
         x: snake[0].x + direction.x,
         y: snake[0].y + direction.y
       };
 
       // Check collision with walls
-      if (newHead.x < 0 || newHead.x >= (canvas.width / GRID_SIZE) ||
-          newHead.y < 0 || newHead.y >= (canvas.height / GRID_SIZE)) {
+      if (newHead.x < 0 || newHead.x >= GRID_WIDTH ||
+          newHead.y < 0 || newHead.y >= GRID_HEIGHT) {
         handleGameOver();
         return;
       }
 
-      // Check collision with self
-      if (snake.some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
+      // Check collision with self (skip head)
+      if (snake.slice(1).some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
         handleGameOver();
         return;
       }
@@ -76,48 +108,44 @@ export default function Snake() {
         currentScore++;
         setScore(currentScore);
         gameSpeed = Math.max(50, INITIAL_SPEED - currentScore * 5);
-        placeFood();
+        food = getRandomFoodPosition();
       } else {
         snake.pop();
       }
     }
 
     function draw() {
-      // Clear canvas
-      ctx.fillStyle = 'black';
+      // Clear canvas with dark background
+      ctx.fillStyle = '#1a1a1a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Draw grid (optional)
+      ctx.strokeStyle = '#2a2a2a';
+      for (let i = 0; i < GRID_WIDTH; i++) {
+        for (let j = 0; j < GRID_HEIGHT; j++) {
+          ctx.strokeRect(i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+        }
+      }
+
       // Draw snake
-      ctx.fillStyle = '#2196F3';
-      snake.forEach(segment => {
+      snake.forEach((segment, index) => {
+        ctx.fillStyle = index === 0 ? '#4CAF50' : '#388E3C'; // Different color for head
         ctx.fillRect(
-          segment.x * GRID_SIZE,
-          segment.y * GRID_SIZE,
-          GRID_SIZE - 1,
-          GRID_SIZE - 1
+          segment.x * GRID_SIZE + 1,
+          segment.y * GRID_SIZE + 1,
+          GRID_SIZE - 2,
+          GRID_SIZE - 2
         );
       });
 
       // Draw food
-      ctx.fillStyle = '#4CAF50';
+      ctx.fillStyle = '#f44336';
       ctx.fillRect(
-        food.x * GRID_SIZE,
-        food.y * GRID_SIZE,
-        GRID_SIZE - 1,
-        GRID_SIZE - 1
+        food.x * GRID_SIZE + 1,
+        food.y * GRID_SIZE + 1,
+        GRID_SIZE - 2,
+        GRID_SIZE - 2
       );
-    }
-
-    function placeFood() {
-      const gridWidth = Math.floor(canvas.width / GRID_SIZE);
-      const gridHeight = Math.floor(canvas.height / GRID_SIZE);
-
-      do {
-        food = {
-          x: Math.floor(Math.random() * gridWidth),
-          y: Math.floor(Math.random() * gridHeight)
-        };
-      } while (snake.some(segment => segment.x === food.x && segment.y === food.y));
     }
 
     function handleGameOver() {
@@ -126,27 +154,30 @@ export default function Snake() {
     }
 
     const handleKeyPress = (e: KeyboardEvent) => {
+      if (!gameStarted && (e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
+          e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+        gameStarted = true;
+      }
+
       switch (e.key) {
         case 'ArrowUp':
-          if (direction.y === 0) newDirection = { x: 0, y: -1 };
+          if (direction.y !== 1) newDirection = { x: 0, y: -1 };
           break;
         case 'ArrowDown':
-          if (direction.y === 0) newDirection = { x: 0, y: 1 };
+          if (direction.y !== -1) newDirection = { x: 0, y: 1 };
           break;
         case 'ArrowLeft':
-          if (direction.x === 0) newDirection = { x: -1, y: 0 };
+          if (direction.x !== 1) newDirection = { x: -1, y: 0 };
           break;
         case 'ArrowRight':
-          if (direction.x === 0) newDirection = { x: 1, y: 0 };
+          if (direction.x !== -1) newDirection = { x: 1, y: 0 };
           break;
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
-
     requestAnimationFrame(gameLoop);
 
-    // Cleanup
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
@@ -162,8 +193,11 @@ export default function Snake() {
       <div className="max-w-2xl w-full px-4">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Snake Evolution</h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-4">
             Use arrow keys to move. Collect food to grow and increase speed!
+          </p>
+          <p className="text-sm text-accent-foreground">
+            Press any arrow key to start
           </p>
           <div className="mt-4 flex justify-center gap-8">
             <div>Score: {score}</div>
