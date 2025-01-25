@@ -1,9 +1,13 @@
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { useState } from "react";
 
 export default function Calculator() {
   const [_, setLocation] = useLocation();
+  const [display, setDisplay] = useState("0");
+  const [previousValue, setPreviousValue] = useState<number | null>(null);
+  const [operation, setOperation] = useState<string | null>(null);
+  const [newNumber, setNewNumber] = useState(true);
 
   const calculatorButtons = [
     ["sin", "cos", "tan", "(", ")"],
@@ -12,6 +16,122 @@ export default function Calculator() {
     ["1", "2", "3", "-", "^"],
     ["0", ".", "=", "+", "←"]
   ];
+
+  const handleNumber = (num: string) => {
+    if (newNumber) {
+      setDisplay(num);
+      setNewNumber(false);
+    } else {
+      setDisplay(display === "0" ? num : display + num);
+    }
+  };
+
+  const handleDecimal = () => {
+    if (newNumber) {
+      setDisplay("0.");
+      setNewNumber(false);
+    } else if (!display.includes(".")) {
+      setDisplay(display + ".");
+    }
+  };
+
+  const handleOperator = (op: string) => {
+    const current = parseFloat(display);
+
+    if (previousValue === null) {
+      setPreviousValue(current);
+    } else if (operation) {
+      const result = calculate(previousValue, current, operation);
+      setPreviousValue(result);
+      setDisplay(String(result));
+    }
+
+    setOperation(op);
+    setNewNumber(true);
+  };
+
+  const calculate = (a: number, b: number, op: string): number => {
+    switch (op) {
+      case "+": return a + b;
+      case "-": return a - b;
+      case "×": return a * b;
+      case "÷": return a / b;
+      case "^": return Math.pow(a, b);
+      default: return b;
+    }
+  };
+
+  const handleSpecialFunction = (func: string) => {
+    const current = parseFloat(display);
+    let result: number;
+
+    switch (func) {
+      case "sin":
+        result = Math.sin(current * Math.PI / 180);
+        break;
+      case "cos":
+        result = Math.cos(current * Math.PI / 180);
+        break;
+      case "tan":
+        result = Math.tan(current * Math.PI / 180);
+        break;
+      case "√":
+        result = Math.sqrt(current);
+        break;
+      default:
+        return;
+    }
+
+    setDisplay(result.toFixed(8).replace(/\.?0+$/, ""));
+    setPreviousValue(null);
+    setOperation(null);
+    setNewNumber(true);
+  };
+
+  const handleEquals = () => {
+    if (previousValue === null || operation === null) return;
+
+    const current = parseFloat(display);
+    const result = calculate(previousValue, current, operation);
+
+    setDisplay(String(result));
+    setPreviousValue(null);
+    setOperation(null);
+    setNewNumber(true);
+  };
+
+  const handleClear = () => {
+    setDisplay("0");
+    setPreviousValue(null);
+    setOperation(null);
+    setNewNumber(true);
+  };
+
+  const handleBackspace = () => {
+    if (display.length === 1 || (display.length === 2 && display.includes("-"))) {
+      setDisplay("0");
+    } else {
+      setDisplay(display.slice(0, -1));
+    }
+  };
+
+  const handleButtonClick = (btn: string) => {
+    if (btn === "AC") {
+      handleClear();
+    } else if (btn === "←") {
+      handleBackspace();
+    } else if (btn === "=") {
+      handleEquals();
+    } else if ("0123456789".includes(btn)) {
+      handleNumber(btn);
+    } else if (btn === ".") {
+      handleDecimal();
+    } else if (["+", "-", "×", "÷", "^"].includes(btn)) {
+      handleOperator(btn);
+    } else if (["sin", "cos", "tan", "√"].includes(btn)) {
+      handleSpecialFunction(btn);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -41,7 +161,7 @@ export default function Calculator() {
               type="text"
               className="w-full text-right text-2xl bg-transparent outline-none"
               readOnly
-              value="0"
+              value={display}
             />
           </div>
 
@@ -53,6 +173,7 @@ export default function Calculator() {
                   key={`${rowIndex}-${btnIndex}`}
                   variant={btn === "=" ? "default" : "outline"}
                   className={`h-12 text-sm ${btn === "=" ? "bg-blue-500 hover:bg-blue-600" : "bg-white hover:bg-gray-50"}`}
+                  onClick={() => handleButtonClick(btn)}
                 >
                   {btn}
                 </Button>
@@ -61,13 +182,13 @@ export default function Calculator() {
           </div>
         </div>
 
-        {/* Discreet Back Button */}
-        <div 
+        {/* Back Button (disguised as version number) */}
+        <button 
           onClick={() => setLocation("/chat")}
-          className="mt-8 text-center text-xs text-gray-400 hover:text-gray-500 cursor-pointer"
+          className="mt-8 mx-auto block text-xs text-gray-400 hover:text-blue-500 cursor-pointer transition-colors duration-200"
         >
-          Version 2.5.1
-        </div>
+          Version 2.5.1 - Click for Updates
+        </button>
       </main>
 
       {/* Footer */}
