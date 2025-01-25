@@ -71,7 +71,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
   // Log a masked version of the API key for debugging
   const maskedKey = process.env.OPENAI_API_KEY.substring(0, 3) + '...' + 
                     process.env.OPENAI_API_KEY.substring(process.env.OPENAI_API_KEY.length - 4);
-  console.log(`[${requestId}] API key present with prefix: ${maskedKey.substring(0, 3)}`);
+  console.log(`[${requestId}] Using API key starting with: ${maskedKey.substring(0, 3)}`);
 
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -81,8 +81,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       throw new Error("Missing request body");
     }
 
-    console.log(`[${requestId}] Received chat request body:`, event.body);
-
+    console.log(`[${requestId}] Parsing request body`);
     const { message, context = "" } = JSON.parse(event.body);
 
     if (!message) {
@@ -137,12 +136,11 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       throw new Error("No response generated from OpenAI API");
     }
 
+    console.log(`[${requestId}] Processing successful response`);
     const result = {
       message: response.choices[0].message.content,
       status: "success",
     };
-
-    console.log(`[${requestId}] Sending successful response`);
 
     return {
       statusCode: 200,
@@ -171,8 +169,8 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
         headers,
         body: JSON.stringify({
           error: "OpenAI API Error",
-          details: error.response.data?.error?.message || error.message,
-        }),
+          details: error.response.data?.error?.message || error.message
+        })
       };
     }
 
@@ -181,8 +179,8 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       headers,
       body: JSON.stringify({
         error: "Failed to process your request",
-        details: error.message,
-      }),
+        details: error.message
+      })
     };
   }
 }
