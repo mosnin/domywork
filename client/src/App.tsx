@@ -11,6 +11,7 @@ import Tetris from "@/pages/games/tetris";
 import MemoryMatch from "@/pages/games/memory-match";
 import PuzzleSlide from "@/pages/games/puzzle-slide";
 import WordScramble from "@/pages/games/word-scramble";
+import Snake from "@/pages/games/snake";
 import Mathematics from "@/pages/subjects/mathematics";
 import Sciences from "@/pages/subjects/sciences";
 import Essays from "@/pages/subjects/essays";
@@ -30,12 +31,13 @@ function Router() {
       <Route path="/games/memory-match" component={MemoryMatch} />
       <Route path="/games/puzzle-slide" component={PuzzleSlide} />
       <Route path="/games/word-scramble" component={WordScramble} />
+      <Route path="/games/snake" component={Snake} />
       <Route path="/subjects/mathematics" component={Mathematics} />
       <Route path="/subjects/sciences" component={Sciences} />
       <Route path="/subjects/essays" component={Essays} />
       <Route path="/subjects/history" component={History} />
       <Route path="/subjects/literature" component={Literature} />
-      <Route component={NotFound} />
+      <Route path="/:rest*" component={NotFound} />
     </Switch>
   );
 }
