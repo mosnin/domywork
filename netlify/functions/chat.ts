@@ -11,21 +11,15 @@ type HandlerResponse = {
 
 import OpenAI from "openai";
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing OPENAI_API_KEY environment variable");
-}
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Add CORS headers
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Content-Type': 'application/json'
+};
 
 export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
-  // Add CORS headers
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
-  };
-
   // Handle preflight requests
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -43,7 +37,22 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     };
   }
 
+  // Check if API key is available
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("Missing OPENAI_API_KEY environment variable");
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ 
+        error: "Server configuration error", 
+        details: "API key not configured"
+      }),
+    };
+  }
+
   try {
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
     if (!event.body) {
       throw new Error("Missing request body");
     }
@@ -102,6 +111,18 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     };
   } catch (error: any) {
     console.error("Chat error:", error);
+
+    // Check if it's an API key error
+    if (error.message?.includes('api_key')) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: "API Key Error",
+          details: "There was an issue with the API key configuration"
+        })
+      };
+    }
 
     // Check if it's an OpenAI API error
     if (error.response?.status) {
