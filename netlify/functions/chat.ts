@@ -18,22 +18,49 @@ if (!process.env.OPENAI_API_KEY) {
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
+  // Add CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  // Handle preflight requests
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204,
+      headers,
+      body: ''
+    };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Method Not Allowed" }),
     };
   }
 
   try {
-    const { message, context = "" } = JSON.parse(event.body || "{}");
+    if (!event.body) {
+      throw new Error("Missing request body");
+    }
+
+    console.log("Received chat request body:", event.body);
+
+    const { message, context = "" } = JSON.parse(event.body);
 
     if (!message) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: "Missing message in request body" }),
       };
     }
+
+    console.log("Processing chat request:", { message, context });
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -55,20 +82,42 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       frequency_penalty: 0.5,
     });
 
+    console.log("OpenAI API response received");
+
+    if (!response.choices[0].message.content) {
+      throw new Error("No response generated from OpenAI API");
+    }
+
+    const result = {
+      message: response.choices[0].message.content,
+      status: "success",
+    };
+
+    console.log("Sending successful response");
+
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: response.choices[0].message.content,
-        status: "success",
-      }),
+      headers,
+      body: JSON.stringify(result),
     };
   } catch (error: any) {
     console.error("Chat error:", error);
+
+    // Check if it's an OpenAI API error
+    if (error.response?.status) {
+      return {
+        statusCode: error.response.status,
+        headers,
+        body: JSON.stringify({
+          error: "OpenAI API Error",
+          details: error.response.data?.error?.message || error.message,
+        }),
+      };
+    }
+
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({
         error: "Failed to process your request",
         details: error.message,
