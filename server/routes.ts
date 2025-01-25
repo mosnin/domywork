@@ -12,14 +12,22 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 export function registerRoutes(app: Express): Server {
   app.post("/api/chat", async (req, res) => {
     try {
-      const { message } = req.body;
+      const { message, context = '' } = req.body;
+
+      if (!message) {
+        return res.status(400).json({ 
+          error: "Missing message in request body" 
+        });
+      }
 
       const response = await openai.chat.completions.create({
         model: "gpt-4o",
         messages: [
           {
             role: "system",
-            content: "You are a helpful AI tutor assisting students with their homework. Provide clear, step-by-step explanations that help students understand the concepts."
+            content: `You are an AI-powered homework assistant specializing in ${context || 'general subjects'}. 
+                     Provide clear, step-by-step explanations and ensure responses are educational and help students understand concepts deeply.
+                     When providing solutions, break down complex problems into manageable parts and explain the reasoning behind each step.`
           },
           {
             role: "user",
@@ -27,13 +35,26 @@ export function registerRoutes(app: Express): Server {
           }
         ],
         temperature: 0.7,
-        max_tokens: 1000
+        max_tokens: 2000,
+        presence_penalty: 0.6,
+        frequency_penalty: 0.5
       });
 
-      res.json({ message: response.choices[0].message.content });
-    } catch (error) {
+      if (!response.choices[0].message.content) {
+        throw new Error("No response generated");
+      }
+
+      res.json({ 
+        message: response.choices[0].message.content,
+        status: 'success'
+      });
+
+    } catch (error: any) {
       console.error("Chat error:", error);
-      res.status(500).json({ message: "Failed to process your request" });
+      res.status(500).json({ 
+        error: "Failed to process your request",
+        details: error.message
+      });
     }
   });
 
