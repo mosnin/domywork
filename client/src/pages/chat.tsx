@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Sidebar from "@/components/layout/sidebar";
 import MessageList from "@/components/chat/message-list";
 import ChatInput from "@/components/chat/chat-input";
@@ -11,6 +11,11 @@ export default function Chat() {
   const [showAd, setShowAd] = useState(false);
   const [responseCount, setResponseCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const clearChat = () => {
+    setMessages([]);
+    setResponseCount(0);
+  };
 
   const handleNewMessage = async (content: string) => {
     setIsLoading(true);
@@ -65,7 +70,7 @@ export default function Chat() {
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar />
+      <Sidebar onClearChat={clearChat} />
       <main className="flex-1 flex flex-col">
         <MessageList messages={messages} isLoading={isLoading} />
         <ChatInput onSend={handleNewMessage} disabled={isLoading || showAd} />

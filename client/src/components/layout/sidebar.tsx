@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -16,27 +16,46 @@ const navigation = [
   { name: "Chat", href: "/chat" },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClearChat?: () => void;
+}
+
+export default function Sidebar({ onClearChat }: SidebarProps) {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
 
   const NavLinks = () => (
-    <nav className="space-y-1">
-      {navigation.map((item) => (
-        <Link key={item.name} href={item.href}>
-          <a
-            className={cn(
-              "flex items-center px-4 py-2 text-sm font-medium rounded-md",
-              location === item.href
-                ? "bg-primary text-primary-foreground"
-                : "text-foreground hover:bg-muted"
-            )}
+    <>
+      <nav className="space-y-1">
+        {navigation.map((item) => (
+          <Link key={item.name} href={item.href}>
+            <a
+              className={cn(
+                "flex items-center px-4 py-2 text-sm font-medium rounded-md",
+                location === item.href
+                  ? "bg-primary text-primary-foreground"
+                  : "text-foreground hover:bg-muted"
+              )}
+            >
+              {item.name}
+            </a>
+          </Link>
+        ))}
+      </nav>
+      {location === "/chat" && onClearChat && (
+        <div className="mt-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-sm text-muted-foreground hover:text-destructive"
+            onClick={onClearChat}
           >
-            {item.name}
-          </a>
-        </Link>
-      ))}
-    </nav>
+            <Trash2 className="mr-2 size-4" />
+            Clear Chat
+          </Button>
+        </div>
+      )}
+    </>
   );
 
   return (
