@@ -10,15 +10,21 @@ export default function Chat() {
   const [messages, setMessages] = useLocalStorage<Message[]>("chat-messages", []);
   const [showAd, setShowAd] = useState(false);
   const [responseCount, setResponseCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNewMessage = async (content: string) => {
+    setIsLoading(true);
+
     // Add user message
     const userMessage: Message = {
       role: "user",
       content,
       timestamp: new Date().toISOString(),
     };
-    setMessages((prev) => [...prev, userMessage]);
+
+    // Update messages with user's message first
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
 
     try {
       const response = await fetch("/api/chat", {
@@ -27,7 +33,9 @@ export default function Chat() {
         body: JSON.stringify({ message: content }),
       });
 
-      if (!response.ok) throw new Error("Failed to get response");
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
 
       const data = await response.json();
       const assistantMessage: Message = {
@@ -36,7 +44,10 @@ export default function Chat() {
         timestamp: new Date().toISOString(),
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      // Update messages with assistant's response
+      setMessages([...updatedMessages, assistantMessage]);
+
+      // Update response count and show ad if needed
       setResponseCount((prev) => {
         const newCount = prev + 1;
         if (newCount % 5 === 0) {
@@ -46,6 +57,8 @@ export default function Chat() {
       });
     } catch (error) {
       console.error("Chat error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,7 +76,7 @@ export default function Chat() {
       <Sidebar />
       <main className="flex-1 flex flex-col">
         <MessageList messages={messages} />
-        <ChatInput onSend={handleNewMessage} />
+        <ChatInput onSend={handleNewMessage} disabled={isLoading} />
       </main>
       {showAd && <FullscreenAd onClose={() => setShowAd(false)} />}
     </div>
