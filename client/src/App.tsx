@@ -6,6 +6,9 @@ import Home from "@/pages/home";
 import Chat from "@/pages/chat";
 import Calculator from "@/pages/calculator";
 import Games from "@/pages/games";
+import Runner from "@/pages/games/runner";
+import Snake from "@/pages/games/snake";
+import Tetris from "@/pages/games/tetris";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +18,9 @@ function Router() {
       <Route path="/chat" component={Chat} />
       <Route path="/calculator" component={Calculator} />
       <Route path="/games" component={Games} />
+      <Route path="/games/runner" component={Runner} />
+      <Route path="/games/snake" component={Snake} />
+      <Route path="/games/tetris" component={Tetris} />
       <Route component={NotFound} />
     </Switch>
   );
