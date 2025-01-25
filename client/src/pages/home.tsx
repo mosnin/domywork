@@ -86,6 +86,47 @@ export default function Home() {
             </div>
           </div>
         </main>
+
+        {/* Footer */}
+        <footer className="mt-20 border-t border-blue-500/20 pt-16 pb-8 relative">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+            <div>
+              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Product</h3>
+              <ul className="space-y-3">
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Features</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Security</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Updates</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Support</h3>
+              <ul className="space-y-3">
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Help Center</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Community</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Contact</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Company</h3>
+              <ul className="space-y-3">
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">About</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Blog</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Partners</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Legal</h3>
+              <ul className="space-y-3">
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Privacy</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Terms</span></li>
+                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">License</span></li>
+              </ul>
+            </div>
+          </div>
+          <div className="text-center text-blue-200/50 text-sm">
+            <p>&copy; 2025 Your AI Study Companion. All rights reserved.</p>
+          </div>
+        </footer>
       </div>
     </div>
   );
