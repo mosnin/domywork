@@ -75,7 +75,7 @@ export default function Chat() {
     <div className="flex h-screen bg-background">
       <Sidebar />
       <main className="flex-1 flex flex-col">
-        <MessageList messages={messages} />
+        <MessageList messages={messages} isLoading={isLoading} />
         <ChatInput onSend={handleNewMessage} disabled={isLoading} />
       </main>
       {showAd && <FullscreenAd onClose={() => setShowAd(false)} />}
