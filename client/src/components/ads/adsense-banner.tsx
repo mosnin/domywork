@@ -20,15 +20,17 @@ export default function AdSenseBanner({ index }: AdSenseBannerProps) {
   }, []);
 
   return (
-    <div className="w-full py-4 bg-card">
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client="ca-pub-XXXXX" // Replace with actual AdSense publisher ID
-        data-ad-slot={`banner-${index}`} // Unique ad slot for each instance
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      />
+    <div className="max-w-full mx-4 my-2 bg-card border rounded-md shadow-sm">
+      <div className="h-24 overflow-hidden">
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-XXXXX" // Replace with actual AdSense publisher ID
+          data-ad-slot={`banner-${index}`} // Unique ad slot for each instance
+          data-ad-format="fluid"
+          data-ad-layout-key="-fb+5w+4e-db+86"
+        />
+      </div>
     </div>
   );
 }

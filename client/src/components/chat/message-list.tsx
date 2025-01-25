@@ -36,11 +36,12 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
       ref={scrollRef} 
       className="flex-1 overflow-y-auto"
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col divide-y divide-border">
         {messages.map((message, index) => {
-          const elements = [
+          const elements = [];
+          elements.push(
             <Message key={`msg-${index}`} message={message} />
-          ];
+          );
 
           // If it's an AI response, increment the counter
           if (message.role === "assistant") {
@@ -48,10 +49,9 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
             // Add banner after every other AI response
             if (aiResponseCount % 2 === 0) {
               elements.push(
-                <AdSenseBanner 
-                  key={`ad-${index}`} 
-                  index={Math.floor(aiResponseCount / 2)} 
-                />
+                <div key={`ad-${index}`} className="py-1">
+                  <AdSenseBanner index={Math.floor(aiResponseCount / 2)} />
+                </div>
               );
             }
           }
