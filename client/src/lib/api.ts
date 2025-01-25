@@ -5,6 +5,7 @@ const API_BASE = import.meta.env.PROD
 export async function sendChatMessage(message: string, context?: string) {
   try {
     const endpoint = `${API_BASE}/chat`;
+    console.log("[Chat Request] Environment:", import.meta.env.PROD ? "production" : "development");
     console.log("[Chat Request] Sending to endpoint:", endpoint);
     console.log("[Chat Request] Payload:", { message, context });
 
