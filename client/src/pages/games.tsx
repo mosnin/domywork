@@ -25,9 +25,17 @@ export default function Games() {
     }
   ];
 
+  // Group games into rows of 3 for grid layout
+  const rows = games.reduce((acc, game, i) => {
+    const rowIndex = Math.floor(i / 3);
+    if (!acc[rowIndex]) acc[rowIndex] = [];
+    acc[rowIndex].push(game);
+    return acc;
+  }, [] as typeof games[]);
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Arcade Games</h1>
           <Link href="/chat">
@@ -36,16 +44,20 @@ export default function Games() {
         </div>
 
         <div className="space-y-8">
-          {games.map((game, index) => (
-            <div key={game.id}>
-              {index > 0 && <AdSenseBanner index={index} />}
-              <Card className="p-6">
-                <h2 className="text-2xl font-semibold mb-2">{game.title}</h2>
-                <p className="text-muted-foreground mb-4">{game.description}</p>
-                <Link href={game.path}>
-                  <Button>Play Now</Button>
-                </Link>
-              </Card>
+          {rows.map((row, rowIndex) => (
+            <div key={rowIndex}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                {row.map((game) => (
+                  <Card key={game.id} className="p-6">
+                    <h2 className="text-2xl font-semibold mb-2">{game.title}</h2>
+                    <p className="text-muted-foreground mb-4">{game.description}</p>
+                    <Link href={game.path}>
+                      <Button>Play Now</Button>
+                    </Link>
+                  </Card>
+                ))}
+              </div>
+              <AdSenseBanner index={rowIndex} />
             </div>
           ))}
         </div>

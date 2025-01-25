@@ -2,6 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
+type Point = {
+  x: number;
+  y: number;
+}
+
 export default function Snake() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameOver, setGameOver] = useState(false);
@@ -15,14 +20,18 @@ export default function Snake() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Set canvas size
+    canvas.width = 400;
+    canvas.height = 400;
+
     const GRID_SIZE = 20;
     const INITIAL_SPEED = 150;
     let gameSpeed = INITIAL_SPEED;
     let lastRenderTime = 0;
-    let snake = [{ x: 10, y: 10 }];
-    let food = { x: 15, y: 15 };
-    let direction = { x: 0, y: 0 };
-    let newDirection = { x: 0, y: 0 };
+    let snake: Point[] = [{ x: 10, y: 10 }];
+    let food: Point = { x: 15, y: 15 };
+    let direction: Point = { x: 0, y: 0 };
+    let newDirection: Point = { x: 0, y: 0 };
     let currentScore = 0;
 
     function gameLoop(currentTime: number) {
@@ -48,8 +57,8 @@ export default function Snake() {
       };
 
       // Check collision with walls
-      if (newHead.x < 0 || newHead.x >= canvas.width / GRID_SIZE ||
-          newHead.y < 0 || newHead.y >= canvas.height / GRID_SIZE) {
+      if (newHead.x < 0 || newHead.x >= (canvas.width / GRID_SIZE) ||
+          newHead.y < 0 || newHead.y >= (canvas.height / GRID_SIZE)) {
         handleGameOver();
         return;
       }
@@ -74,32 +83,41 @@ export default function Snake() {
     }
 
     function draw() {
-      ctx.fillStyle = 'white';
+      // Clear canvas
+      ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Draw snake
       ctx.fillStyle = '#2196F3';
       snake.forEach(segment => {
-        ctx.fillRect(segment.x * GRID_SIZE, segment.y * GRID_SIZE, GRID_SIZE - 1, GRID_SIZE - 1);
+        ctx.fillRect(
+          segment.x * GRID_SIZE,
+          segment.y * GRID_SIZE,
+          GRID_SIZE - 1,
+          GRID_SIZE - 1
+        );
       });
 
       // Draw food
       ctx.fillStyle = '#4CAF50';
-      ctx.fillRect(food.x * GRID_SIZE, food.y * GRID_SIZE, GRID_SIZE - 1, GRID_SIZE - 1);
+      ctx.fillRect(
+        food.x * GRID_SIZE,
+        food.y * GRID_SIZE,
+        GRID_SIZE - 1,
+        GRID_SIZE - 1
+      );
     }
 
     function placeFood() {
-      food = {
-        x: Math.floor(Math.random() * (canvas.width / GRID_SIZE)),
-        y: Math.floor(Math.random() * (canvas.height / GRID_SIZE))
-      };
-      // Ensure food doesn't spawn on snake
-      while (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+      const gridWidth = Math.floor(canvas.width / GRID_SIZE);
+      const gridHeight = Math.floor(canvas.height / GRID_SIZE);
+
+      do {
         food = {
-          x: Math.floor(Math.random() * (canvas.width / GRID_SIZE)),
-          y: Math.floor(Math.random() * (canvas.height / GRID_SIZE))
+          x: Math.floor(Math.random() * gridWidth),
+          y: Math.floor(Math.random() * gridHeight)
         };
-      }
+      } while (snake.some(segment => segment.x === food.x && segment.y === food.y));
     }
 
     function handleGameOver() {
@@ -107,7 +125,7 @@ export default function Snake() {
       setHighScore(prev => Math.max(prev, currentScore));
     }
 
-    window.addEventListener('keydown', e => {
+    const handleKeyPress = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'ArrowUp':
           if (direction.y === 0) newDirection = { x: 0, y: -1 };
@@ -122,9 +140,16 @@ export default function Snake() {
           if (direction.x === 0) newDirection = { x: 1, y: 0 };
           break;
       }
-    });
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
 
     requestAnimationFrame(gameLoop);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
   }, [gameOver]);
 
   const resetGame = () => {
@@ -146,16 +171,14 @@ export default function Snake() {
           </div>
         </div>
 
-        <div className="relative rounded-lg overflow-hidden shadow-lg">
+        <div className="relative mx-auto" style={{ width: "400px", height: "400px" }}>
           <canvas
             ref={canvasRef}
-            width={400}
-            height={400}
-            className="w-full bg-white"
+            className="bg-black rounded-lg shadow-lg"
           />
-          
+
           {gameOver && (
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center rounded-lg">
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-4">Game Over!</h2>
                 <p className="mb-4">Final Score: {score}</p>
