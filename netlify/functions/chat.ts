@@ -1,4 +1,14 @@
-import { Handler } from "@netlify/functions";
+type HandlerEvent = {
+  body: string | null;
+  httpMethod: string;
+};
+
+type HandlerResponse = {
+  statusCode: number;
+  body: string;
+  headers?: { [key: string]: string };
+};
+
 import OpenAI from "openai";
 
 if (!process.env.OPENAI_API_KEY) {
@@ -7,8 +17,7 @@ if (!process.env.OPENAI_API_KEY) {
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-export const handler: Handler = async (event) => {
+export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -66,4 +75,4 @@ export const handler: Handler = async (event) => {
       }),
     };
   }
-};
+}
