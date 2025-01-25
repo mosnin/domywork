@@ -2,6 +2,7 @@ import { Message } from "./message";
 import TypingIndicator from "./typing-indicator";
 import type { Message as MessageType } from "@/lib/chat";
 import { useEffect, useRef } from "react";
+import AdSenseBanner from "../ads/adsense-banner";
 
 interface MessageListProps {
   messages: MessageType[];
@@ -27,15 +28,36 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
     return () => clearTimeout(timer);
   }, [messages, isLoading]);
 
+  // Track the number of AI responses to determine when to show ads
+  let aiResponseCount = 0;
+
   return (
     <div 
       ref={scrollRef} 
       className="flex-1 overflow-y-auto"
     >
       <div className="flex flex-col">
-        {messages.map((message, index) => (
-          <Message key={index} message={message} />
-        ))}
+        {messages.map((message, index) => {
+          const elements = [
+            <Message key={`msg-${index}`} message={message} />
+          ];
+
+          // If it's an AI response, increment the counter
+          if (message.role === "assistant") {
+            aiResponseCount++;
+            // Add banner after every other AI response
+            if (aiResponseCount % 2 === 0) {
+              elements.push(
+                <AdSenseBanner 
+                  key={`ad-${index}`} 
+                  index={Math.floor(aiResponseCount / 2)} 
+                />
+              );
+            }
+          }
+
+          return elements;
+        })}
         {isLoading && <TypingIndicator />}
       </div>
     </div>
