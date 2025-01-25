@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/home";
 import Chat from "@/pages/chat";
 import Calculator from "@/pages/calculator";
+import Games from "@/pages/games";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -13,6 +14,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/chat" component={Chat} />
       <Route path="/calculator" component={Calculator} />
+      <Route path="/games" component={Games} />
       <Route component={NotFound} />
     </Switch>
   );
