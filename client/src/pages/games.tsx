@@ -18,10 +18,22 @@ export default function Games() {
       path: "/games/tetris"
     },
     {
-      id: "snake",
-      title: "Snake Evolution",
-      description: "Classic snake game with a twist - collect power-ups and face increasing challenges!",
-      path: "/games/snake"
+      id: "memory-match",
+      title: "Memory Match",
+      description: "Test your memory by matching pairs of cards. Race against time to improve your score!",
+      path: "/games/memory-match"
+    },
+    {
+      id: "puzzle-slide",
+      title: "Puzzle Slide",
+      description: "Slide tiles to recreate the original image. Multiple difficulty levels available!",
+      path: "/games/puzzle-slide"
+    },
+    {
+      id: "word-scramble",
+      title: "Word Scramble",
+      description: "Unscramble letters to find hidden words. Challenge your vocabulary and spelling!",
+      path: "/games/word-scramble"
     }
   ];
 
