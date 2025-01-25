@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 type HandlerEvent = {
   body: string | null;
   httpMethod: string;
@@ -20,6 +22,10 @@ const headers = {
 };
 
 export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
+  // Generate a request ID for tracking
+  const requestId = crypto.randomBytes(4).toString('hex');
+  console.log(`[${requestId}] Request received:`, event.httpMethod);
+
   // Handle preflight requests
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -39,7 +45,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
 
   // Check if API key is available
   if (!process.env.OPENAI_API_KEY) {
-    console.error("Missing OPENAI_API_KEY environment variable");
+    console.error(`[${requestId}] Missing OPENAI_API_KEY environment variable`);
     return {
       statusCode: 500,
       headers,
@@ -50,18 +56,25 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     };
   }
 
+  // Log a masked version of the API key for debugging
+  const maskedKey = process.env.OPENAI_API_KEY.substring(0, 3) + '...' + 
+                    process.env.OPENAI_API_KEY.substring(process.env.OPENAI_API_KEY.length - 4);
+  console.log(`[${requestId}] API key present with prefix: ${maskedKey.substring(0, 3)}`);
+
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     if (!event.body) {
+      console.error(`[${requestId}] Missing request body`);
       throw new Error("Missing request body");
     }
 
-    console.log("Received chat request body:", event.body);
+    console.log(`[${requestId}] Received chat request body:`, event.body);
 
     const { message, context = "" } = JSON.parse(event.body);
 
     if (!message) {
+      console.error(`[${requestId}] Missing message in parsed body`);
       return {
         statusCode: 400,
         headers,
@@ -69,7 +82,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       };
     }
 
-    console.log("Processing chat request:", { message, context });
+    console.log(`[${requestId}] Processing chat request:`, { message, context });
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -91,9 +104,10 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       frequency_penalty: 0.5,
     });
 
-    console.log("OpenAI API response received");
+    console.log(`[${requestId}] OpenAI API response received`);
 
     if (!response.choices[0].message.content) {
+      console.error(`[${requestId}] No content in OpenAI response`);
       throw new Error("No response generated from OpenAI API");
     }
 
@@ -102,7 +116,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       status: "success",
     };
 
-    console.log("Sending successful response");
+    console.log(`[${requestId}] Sending successful response`);
 
     return {
       statusCode: 200,
@@ -110,7 +124,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       body: JSON.stringify(result),
     };
   } catch (error: any) {
-    console.error("Chat error:", error);
+    console.error(`[${requestId}] Chat error:`, error);
 
     // Check if it's an API key error
     if (error.message?.includes('api_key')) {
