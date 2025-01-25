@@ -1,6 +1,6 @@
 const API_BASE = import.meta.env.PROD 
-  ? "/.netlify/functions"
-  : "/api";
+  ? "/.netlify/functions"  // In production, use Netlify Functions path
+  : "/api";               // In development, use local API
 
 export async function sendChatMessage(message: string, context?: string) {
   try {

@@ -4,6 +4,7 @@ import OpenAI from "openai";
 type HandlerEvent = {
   body: string | null;
   httpMethod: string;
+  path: string;
 };
 
 type HandlerResponse = {
@@ -12,18 +13,16 @@ type HandlerResponse = {
   headers?: { [key: string]: string };
 };
 
-// Add CORS headers
 const headers = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Content-Type': 'application/json'
 };
 
 export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
-  // Generate a request ID for tracking
   const requestId = crypto.randomBytes(4).toString('hex');
-  console.log(`[${requestId}] Request received:`, event.httpMethod);
+  console.log(`[${requestId}] Received ${event.httpMethod} request to ${event.path}`);
 
   // Handle preflight requests
   if (event.httpMethod === 'OPTIONS') {
@@ -35,6 +34,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
   }
 
   if (event.httpMethod !== "POST") {
+    console.log(`[${requestId}] Invalid method: ${event.httpMethod}`);
     return {
       statusCode: 405,
       headers,
@@ -42,7 +42,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     };
   }
 
-  // Check if API key is available and valid format
+  // Validate API key
   if (!process.env.OPENAI_API_KEY) {
     console.error(`[${requestId}] Missing OPENAI_API_KEY environment variable`);
     return {
@@ -55,37 +55,23 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     };
   }
 
-  // Validate API key format
-  if (!process.env.OPENAI_API_KEY.startsWith('sk-')) {
-    console.error(`[${requestId}] Invalid API key format - key should start with 'sk-'`);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: "Server configuration error",
-        details: "Invalid API key format"
-      }),
-    };
-  }
-
-  // Log a masked version of the API key for debugging
-  const maskedKey = process.env.OPENAI_API_KEY.substring(0, 3) + '...' + 
-                    process.env.OPENAI_API_KEY.substring(process.env.OPENAI_API_KEY.length - 4);
-  console.log(`[${requestId}] Using API key starting with: ${maskedKey.substring(0, 3)}`);
-
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     if (!event.body) {
       console.error(`[${requestId}] Missing request body`);
-      throw new Error("Missing request body");
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "Missing request body" }),
+      };
     }
 
     console.log(`[${requestId}] Parsing request body`);
     const { message, context = "" } = JSON.parse(event.body);
 
     if (!message) {
-      console.error(`[${requestId}] Missing message in parsed body`);
+      console.error(`[${requestId}] Missing message in request body`);
       return {
         statusCode: 400,
         headers,
@@ -93,76 +79,61 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       };
     }
 
-    console.log(`[${requestId}] Processing chat request:`, { message, context });
-
-    // Test the OpenAI connection with a simple request first
+    // First test the API key with a minimal request
     try {
       console.log(`[${requestId}] Testing OpenAI connection...`);
-      const testResponse = await openai.chat.completions.create({
+      await openai.chat.completions.create({
         model: "gpt-4",
         messages: [{ role: "user", content: "test" }],
         max_tokens: 5
       });
       console.log(`[${requestId}] OpenAI connection test successful`);
-    } catch (openaiError: any) {
-      console.error(`[${requestId}] OpenAI connection test failed:`, openaiError);
-      throw new Error(`OpenAI connection test failed: ${openaiError.message}`);
+    } catch (error: any) {
+      console.error(`[${requestId}] OpenAI connection test failed:`, error);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: "OpenAI API connection failed",
+          details: error.message
+        })
+      };
     }
 
+    console.log(`[${requestId}] Processing chat request:`, { context });
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
           role: "system",
           content: `You are an AI-powered homework assistant specializing in ${context || "general subjects"}. 
-                   Provide clear, step-by-step explanations and ensure responses are educational and help students understand concepts deeply.
-                   When providing solutions, break down complex problems into manageable parts and explain the reasoning behind each step.`,
+                   Provide clear, step-by-step explanations and ensure responses are educational and help students understand concepts deeply.`
         },
         {
           role: "user",
-          content: message,
-        },
+          content: message
+        }
       ],
       temperature: 0.7,
-      max_tokens: 2000,
-      presence_penalty: 0.6,
-      frequency_penalty: 0.5,
+      max_tokens: 2000
     });
 
-    console.log(`[${requestId}] OpenAI API response received`);
-
     if (!response.choices[0].message.content) {
-      console.error(`[${requestId}] No content in OpenAI response`);
-      throw new Error("No response generated from OpenAI API");
+      throw new Error("No response generated");
     }
-
-    console.log(`[${requestId}] Processing successful response`);
-    const result = {
-      message: response.choices[0].message.content,
-      status: "success",
-    };
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(result),
+      body: JSON.stringify({
+        message: response.choices[0].message.content,
+        status: "success"
+      })
     };
+
   } catch (error: any) {
-    console.error(`[${requestId}] Chat error:`, error);
+    console.error(`[${requestId}] Error:`, error);
 
-    // Check if it's an API key error
-    if (error.message?.includes('api_key')) {
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({
-          error: "API Key Error",
-          details: "There was an issue with the API key configuration"
-        })
-      };
-    }
-
-    // Check if it's an OpenAI API error
     if (error.response?.status) {
       return {
         statusCode: error.response.status,
@@ -178,7 +149,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: "Failed to process your request",
+        error: "Internal server error",
         details: error.message
       })
     };
