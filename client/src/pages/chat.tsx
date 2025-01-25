@@ -47,10 +47,11 @@ export default function Chat() {
       // Update messages with assistant's response
       setMessages([...updatedMessages, assistantMessage]);
 
-      // Update response count and show ad if needed
+      // Update response count and show ad
       setResponseCount((prev) => {
         const newCount = prev + 1;
-        if (newCount % 5 === 0) {
+        // Show ad after first message and every 5 messages thereafter
+        if (newCount === 1 || (newCount > 1 && (newCount - 1) % 5 === 0)) {
           setShowAd(true);
         }
         return newCount;
@@ -62,21 +63,12 @@ export default function Chat() {
     }
   };
 
-  useEffect(() => {
-    if (showAd) {
-      const timer = setTimeout(() => {
-        setShowAd(false);
-      }, 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [showAd]);
-
   return (
     <div className="flex h-screen bg-background">
       <Sidebar />
       <main className="flex-1 flex flex-col">
         <MessageList messages={messages} isLoading={isLoading} />
-        <ChatInput onSend={handleNewMessage} disabled={isLoading} />
+        <ChatInput onSend={handleNewMessage} disabled={isLoading || showAd} />
       </main>
       {showAd && <FullscreenAd onClose={() => setShowAd(false)} />}
     </div>
