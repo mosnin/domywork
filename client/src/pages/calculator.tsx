@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function Calculator() {
   const [_, setLocation] = useLocation();
-  const [display, setDisplay] = useState("0");
+  const [display, setDisplay] = useState<string>("0");
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [newNumber, setNewNumber] = useState(true);
@@ -55,7 +55,7 @@ export default function Calculator() {
       case "+": return a + b;
       case "-": return a - b;
       case "×": return a * b;
-      case "÷": return a / b;
+      case "÷": return b === 0 ? NaN : a / b;
       case "^": return Math.pow(a, b);
       default: return b;
     }
@@ -159,7 +159,7 @@ export default function Calculator() {
           <div className="p-4 bg-gray-50 border-b">
             <input
               type="text"
-              className="w-full text-right text-2xl bg-transparent outline-none"
+              className="w-full text-right text-2xl bg-transparent outline-none text-gray-900"
               readOnly
               value={display}
             />
@@ -172,7 +172,7 @@ export default function Calculator() {
                 <Button
                   key={`${rowIndex}-${btnIndex}`}
                   variant={btn === "=" ? "default" : "outline"}
-                  className={`h-12 text-sm ${btn === "=" ? "bg-blue-500 hover:bg-blue-600" : "bg-white hover:bg-gray-50"}`}
+                  className={`h-12 text-sm ${btn === "=" ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-white hover:bg-gray-50 text-gray-900 border-gray-200"}`}
                   onClick={() => handleButtonClick(btn)}
                 >
                   {btn}
