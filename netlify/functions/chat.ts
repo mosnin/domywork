@@ -99,7 +99,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     try {
       console.log(`[${requestId}] Testing OpenAI connection...`);
       const testResponse = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4",
         messages: [{ role: "user", content: "test" }],
         max_tokens: 5
       });
@@ -110,7 +110,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     }
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: [
         {
           role: "system",
