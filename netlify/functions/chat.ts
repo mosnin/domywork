@@ -1,4 +1,5 @@
 import * as crypto from "crypto";
+import OpenAI from "openai";
 
 type HandlerEvent = {
   body: string | null;
@@ -10,8 +11,6 @@ type HandlerResponse = {
   body: string;
   headers?: { [key: string]: string };
 };
-
-import OpenAI from "openai";
 
 // Add CORS headers
 const headers = {
@@ -43,7 +42,7 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     };
   }
 
-  // Check if API key is available
+  // Check if API key is available and valid format
   if (!process.env.OPENAI_API_KEY) {
     console.error(`[${requestId}] Missing OPENAI_API_KEY environment variable`);
     return {
@@ -52,6 +51,19 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
       body: JSON.stringify({ 
         error: "Server configuration error", 
         details: "API key not configured"
+      }),
+    };
+  }
+
+  // Validate API key format
+  if (!process.env.OPENAI_API_KEY.startsWith('sk-')) {
+    console.error(`[${requestId}] Invalid API key format - key should start with 'sk-'`);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        error: "Server configuration error",
+        details: "Invalid API key format"
       }),
     };
   }
@@ -83,6 +95,20 @@ export async function handler(event: HandlerEvent): Promise<HandlerResponse> {
     }
 
     console.log(`[${requestId}] Processing chat request:`, { message, context });
+
+    // Test the OpenAI connection with a simple request first
+    try {
+      console.log(`[${requestId}] Testing OpenAI connection...`);
+      const testResponse = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [{ role: "user", content: "test" }],
+        max_tokens: 5
+      });
+      console.log(`[${requestId}] OpenAI connection test successful`);
+    } catch (openaiError: any) {
+      console.error(`[${requestId}] OpenAI connection test failed:`, openaiError);
+      throw new Error(`OpenAI connection test failed: ${openaiError.message}`);
+    }
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",

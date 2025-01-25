@@ -4,9 +4,11 @@ const API_BASE = import.meta.env.PROD
 
 export async function sendChatMessage(message: string, context?: string) {
   try {
-    console.log("Sending chat message to:", `${API_BASE}/chat`);
+    const endpoint = `${API_BASE}/chat`;
+    console.log("[Chat Request] Sending to endpoint:", endpoint);
+    console.log("[Chat Request] Payload:", { message, context });
 
-    const response = await fetch(`${API_BASE}/chat`, {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,20 +18,25 @@ export async function sendChatMessage(message: string, context?: string) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Chat API error:", errorText);
+      console.error("[Chat Error] API error response:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText,
+      });
       throw new Error(`Chat API error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log("Chat API response:", data);
+    console.log("[Chat Success] API response:", data);
 
     if (!data.message) {
+      console.error("[Chat Error] Invalid response format:", data);
       throw new Error("Invalid response from chat API");
     }
 
     return data;
   } catch (error) {
-    console.error("Error in sendChatMessage:", error);
+    console.error("[Chat Error] Request failed:", error);
     throw error;
   }
 }
