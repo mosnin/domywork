@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Trash2 } from "lucide-react";
+import { Menu, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -31,16 +31,18 @@ export default function Sidebar({ onClearChat }: SidebarProps) {
       <nav className="space-y-1">
         {navigation.map((item) => (
           <Link key={item.name} href={item.href}>
-            <a
+            <Button
+              variant="ghost"
               className={cn(
-                "flex items-center px-4 py-2 text-sm font-medium rounded-md",
+                "w-full justify-start gap-2 text-sm font-medium",
                 location === item.href
-                  ? "bg-primary text-primary-foreground"
-                  : "text-foreground hover:bg-muted"
+                  ? "bg-blue-600/10 text-blue-600 hover:bg-blue-600/20"
+                  : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
               )}
+              onClick={() => setOpen(false)}
             >
               {item.name}
-            </a>
+            </Button>
           </Link>
         ))}
       </nav>
@@ -49,10 +51,13 @@ export default function Sidebar({ onClearChat }: SidebarProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-sm text-muted-foreground hover:text-destructive"
-            onClick={onClearChat}
+            className="w-full justify-start gap-2 text-sm text-red-400 hover:bg-red-900/20 hover:text-red-300"
+            onClick={() => {
+              onClearChat();
+              setOpen(false);
+            }}
           >
-            <Trash2 className="mr-2 size-4" />
+            <Trash2 className="h-4 w-4" />
             Clear Chat
           </Button>
         </div>
@@ -68,25 +73,28 @@ export default function Sidebar({ onClearChat }: SidebarProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden fixed top-4 left-4"
+            className="fixed top-4 left-4 z-50 md:hidden bg-gray-900/50 backdrop-blur-sm hover:bg-gray-800"
           >
-            <Menu className="size-4" />
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </SheetTrigger>
-        <SheetContent side="left">
-          <SheetHeader>
-            <SheetTitle>Do my work</SheetTitle>
+        <SheetContent 
+          side="left" 
+          className="w-64 bg-gray-900 border-gray-800 p-0"
+        >
+          <SheetHeader className="px-4 py-4 border-b border-gray-800">
+            <SheetTitle className="text-white">Do my work</SheetTitle>
           </SheetHeader>
-          <div className="mt-4">
+          <div className="px-2 py-4">
             <NavLinks />
           </div>
         </SheetContent>
       </Sheet>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:flex h-full w-64 flex-col border-r">
-        <div className="flex h-14 items-center border-b px-4">
-          <h1 className="text-lg font-semibold">Do my work</h1>
+      <div className="hidden md:flex h-full w-64 flex-col bg-gray-900/50 backdrop-blur-sm border-r border-gray-800">
+        <div className="flex h-14 items-center border-b border-gray-800 px-4">
+          <h1 className="text-lg font-semibold text-white">Do my work</h1>
         </div>
         <div className="flex-1 px-2 py-4">
           <NavLinks />
