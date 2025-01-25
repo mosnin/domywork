@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils";
 import type { Message } from "@/lib/chat";
+import { Copy, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface MessageProps {
   message: Message;
@@ -7,6 +10,40 @@ interface MessageProps {
 
 export function Message({ message }: MessageProps) {
   const isUser = message.role === "user";
+  const { toast } = useToast();
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      toast({
+        description: "Message copied to clipboard",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        description: "Failed to copy message",
+      });
+    }
+  };
+
+  const downloadAsText = () => {
+    try {
+      const blob = new Blob([message.content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ai-response-${new Date().toISOString().slice(0, 10)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        description: "Failed to download message",
+      });
+    }
+  };
 
   return (
     <div
@@ -28,6 +65,26 @@ export function Message({ message }: MessageProps) {
           {isUser ? "You" : "Assistant"}
         </div>
         <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+        {!isUser && (
+          <div className="flex gap-2 mt-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              onClick={copyToClipboard}
+            >
+              <Copy className="size-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              onClick={downloadAsText}
+            >
+              <Download className="size-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
