@@ -1,7 +1,16 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 
+const navigation = [
+  { name: "Home", href: "/" },
+  { name: "Chat", href: "/chat" },
+  { name: "Resources", href: "/resources" },
+  { name: "Docs", href: "/docs" },
+];
+
 export default function Navbar() {
+  const [location] = useLocation();
+
   return (
     <nav className="container mx-auto px-4 py-6 relative flex justify-between items-center">
       <Link href="/">
@@ -10,16 +19,20 @@ export default function Navbar() {
         </h1>
       </Link>
       <div className="flex items-center gap-4">
-        <Link href="/resources">
-          <Button variant="ghost" className="text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10">
-            Resources
-          </Button>
-        </Link>
-        <Link href="/chat">
-          <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
-            Start Chat
-          </Button>
-        </Link>
+        {navigation.filter(item => item.href !== "/").map((item) => (
+          <Link key={item.name} href={item.href}>
+            <Button
+              variant={item.href === "/chat" ? "default" : "ghost"}
+              className={
+                item.href === "/chat"
+                  ? "bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl"
+                  : "text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10"
+              }
+            >
+              {item.name}
+            </Button>
+          </Link>
+        ))}
       </div>
     </nav>
   );
