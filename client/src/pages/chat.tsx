@@ -70,18 +70,20 @@ export default function Chat() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* Background gradient and grid pattern removed */}
-
       <div className="relative flex h-screen">
         <Sidebar onClearChat={clearChat} />
         <main className="flex-1 flex flex-col">
-          <div className="p-4 border-b border-yellow-500/20 bg-black/20 backdrop-blur-sm">
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
-              Decision Buddy AI
-            </h1>
-            <p className="text-yellow-200/60 text-sm">
-              Your trusted companion for making better choices
-            </p>
+          <div className="p-4 md:p-6 border-b border-yellow-500/20 bg-black/20 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <div className="ml-12 md:ml-0">
+                <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
+                  Decision Buddy AI
+                </h1>
+                <p className="text-yellow-200/60 text-sm">
+                  Your trusted companion for making better choices
+                </p>
+              </div>
+            </div>
           </div>
           <MessageList messages={messages} isLoading={isLoading} />
           <div className="border-t border-yellow-500/20 bg-black/20 backdrop-blur-sm">
