@@ -45,6 +45,18 @@ export function Message({ message }: MessageProps) {
     }
   };
 
+  const parseContent = (content: string) => {
+    const parts = content.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        // Remove the asterisks and wrap in strong tag
+        const text = part.slice(2, -2);
+        return <strong key={index} className="font-bold">{text}</strong>;
+      }
+      return part;
+    });
+  };
+
   return (
     <div
       className={cn(
@@ -64,7 +76,9 @@ export function Message({ message }: MessageProps) {
         <div className="text-sm font-medium mb-1">
           {isUser ? "You" : "Assistant"}
         </div>
-        <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+        <div className="text-sm whitespace-pre-wrap">
+          {parseContent(message.content)}
+        </div>
         {!isUser && (
           <div className="flex gap-2 mt-2">
             <Button
