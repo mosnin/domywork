@@ -21,12 +21,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const NavLinks = () => (
-    <>
+    <div className="flex flex-col sm:flex-row gap-2">
       {navigation.filter(item => item.href !== "/").map((item) => (
         <Link key={item.name} href={item.href}>
           <Button
             variant="ghost"
-            className="text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10"
+            className="w-full text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10"
             onClick={() => setOpen(false)}
           >
             {item.name}
@@ -35,13 +35,13 @@ export default function Navbar() {
       ))}
       <Link href="/chat">
         <Button 
-          className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl ml-2"
+          className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl"
           onClick={() => setOpen(false)}
         >
           Start Chat
         </Button>
       </Link>
-    </>
+    </div>
   );
 
   return (
@@ -58,26 +58,26 @@ export default function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden bg-gray-900/50 backdrop-blur-sm hover:bg-gray-800"
+            className="sm:hidden bg-gray-900/50 backdrop-blur-sm hover:bg-yellow-500/10 text-yellow-400"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </SheetTrigger>
         <SheetContent 
-          side="left" 
+          side="right" 
           className="w-64 bg-gray-900 border-yellow-500/20 p-0"
         >
           <SheetHeader className="px-4 py-4 border-b border-yellow-500/20">
             <SheetTitle className="text-yellow-400">Good Choices</SheetTitle>
           </SheetHeader>
-          <div className="px-2 py-4">
+          <div className="px-4 py-6 flex flex-col gap-4">
             <NavLinks />
           </div>
         </SheetContent>
       </Sheet>
 
       {/* Desktop menu */}
-      <div className="hidden md:flex items-center gap-4">
+      <div className="hidden sm:flex items-center gap-4">
         <NavLinks />
       </div>
     </nav>
