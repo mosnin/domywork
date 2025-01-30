@@ -13,9 +13,8 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Disguise Page", href: "/calculator" },
-  { name: "Games", href: "/games" },
   { name: "Chat", href: "/chat" },
+  { name: "Resources", href: "/resources" },
 ];
 
 interface SidebarProps {
@@ -36,8 +35,8 @@ export default function Sidebar({ onClearChat }: SidebarProps) {
               className={cn(
                 "w-full justify-start gap-2 text-sm font-medium",
                 location === item.href
-                  ? "bg-blue-600/10 text-blue-600 hover:bg-blue-600/20"
-                  : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
+                  ? "bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20"
+                  : "text-yellow-200/70 hover:bg-gray-800/50 hover:text-yellow-200"
               )}
               onClick={() => setOpen(false)}
             >
@@ -80,10 +79,10 @@ export default function Sidebar({ onClearChat }: SidebarProps) {
         </SheetTrigger>
         <SheetContent 
           side="left" 
-          className="w-64 bg-gray-900 border-gray-800 p-0"
+          className="w-64 bg-gray-900 border-yellow-500/20 p-0"
         >
-          <SheetHeader className="px-4 py-4 border-b border-gray-800">
-            <SheetTitle className="text-white">Do my work</SheetTitle>
+          <SheetHeader className="px-4 py-4 border-b border-yellow-500/20">
+            <SheetTitle className="text-yellow-400">Decision Buddy</SheetTitle>
           </SheetHeader>
           <div className="px-2 py-4">
             <NavLinks />
@@ -92,9 +91,9 @@ export default function Sidebar({ onClearChat }: SidebarProps) {
       </Sheet>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:flex h-full w-64 flex-col bg-gray-900/50 backdrop-blur-sm border-r border-gray-800">
-        <div className="flex h-14 items-center border-b border-gray-800 px-4">
-          <h1 className="text-lg font-semibold text-white">Do my work</h1>
+      <div className="hidden md:flex h-full w-64 flex-col bg-gray-900/50 backdrop-blur-sm border-r border-yellow-500/20">
+        <div className="flex h-14 items-center border-b border-yellow-500/20 px-4">
+          <h1 className="text-lg font-semibold text-yellow-400">Decision Buddy</h1>
         </div>
         <div className="flex-1 px-2 py-4">
           <NavLinks />
