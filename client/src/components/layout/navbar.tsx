@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Chat", href: "/chat" },
   { name: "Resources", href: "/resources" },
   { name: "Docs", href: "/docs" },
 ];
@@ -22,17 +21,18 @@ export default function Navbar() {
         {navigation.filter(item => item.href !== "/").map((item) => (
           <Link key={item.name} href={item.href}>
             <Button
-              variant={item.href === "/chat" ? "default" : "ghost"}
-              className={
-                item.href === "/chat"
-                  ? "bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl"
-                  : "text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10"
-              }
+              variant="ghost"
+              className="text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10"
             >
               {item.name}
             </Button>
           </Link>
         ))}
+        <Link href="/chat">
+          <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl ml-2">
+            Start Chat
+          </Button>
+        </Link>
       </div>
     </nav>
   );
