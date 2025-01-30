@@ -9,11 +9,11 @@ export default function Home() {
 
       <div className="container mx-auto px-4 relative">
         <nav className="py-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
-            Do my work
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
+            Decision Buddy
           </h1>
           <Link href="/chat">
-            <Button className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 rounded-xl">
+            <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
               Start Chat
             </Button>
           </Link>
@@ -21,41 +21,57 @@ export default function Home() {
 
         <main className="py-20">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-violet-400">
-              Your AI Study Companion
+            <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600">
+              Your AI Decision Assistant
             </h1>
-            <p className="text-xl text-blue-200/80 mb-12">
-              Level up your learning with AI-powered homework assistance. Get instant help, explanations, and guidance.
+            <p className="text-xl text-yellow-200/80 mb-12">
+              Navigate life's choices with confidence. Get guidance, understanding, and support for making better decisions.
             </p>
             <Link href="/chat">
-              <Button size="lg" className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 rounded-xl transform transition hover:scale-105">
-                Power Up Your Studies
+              <Button size="lg" className="text-lg px-8 py-6 bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl transform transition hover:scale-105">
+                Get Smart Advice
               </Button>
             </Link>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 mt-20">
-            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/10 border border-blue-500/20 bg-gray-900/50 backdrop-blur-sm">
-              <img
-                src="https://images.unsplash.com/photo-1501504905252-473c47e087f8"
-                alt="Modern learning environment"
-                className="w-full h-64 object-cover object-center"
-              />
-            </div>
             <div className="space-y-6 flex flex-col justify-center">
-              <h2 className="text-3xl font-bold text-blue-300">How it works</h2>
+              <h2 className="text-3xl font-bold text-yellow-300">How It Works</h2>
               <div className="space-y-4">
-                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-blue-500/20 backdrop-blur-sm">
-                  <div className="text-blue-400 text-xl font-bold">01</div>
-                  <p className="text-blue-100">Drop your question or homework challenge</p>
+                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-yellow-500/20 backdrop-blur-sm">
+                  <div className="text-yellow-400 text-xl font-bold">01</div>
+                  <p className="text-yellow-100">Share your situation or dilemma</p>
                 </div>
-                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-blue-500/20 backdrop-blur-sm">
-                  <div className="text-blue-400 text-xl font-bold">02</div>
-                  <p className="text-blue-100">Get instant AI-powered explanations</p>
+                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-yellow-500/20 backdrop-blur-sm">
+                  <div className="text-yellow-400 text-xl font-bold">02</div>
+                  <p className="text-yellow-100">Get instant AI-powered guidance</p>
                 </div>
-                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-blue-500/20 backdrop-blur-sm">
-                  <div className="text-blue-400 text-xl font-bold">03</div>
-                  <p className="text-blue-100">Level up your understanding</p>
+                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-yellow-500/20 backdrop-blur-sm">
+                  <div className="text-yellow-400 text-xl font-bold">03</div>
+                  <p className="text-yellow-100">Make informed decisions</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-yellow-500/10 border border-yellow-500/20 bg-gray-900/50 backdrop-blur-sm p-8">
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-yellow-300 mb-4">We Help With</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
+                    <h4 className="font-semibold text-yellow-200">Life Choices</h4>
+                    <p className="text-yellow-200/60 text-sm">Navigate important decisions</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
+                    <h4 className="font-semibold text-yellow-200">Consequences</h4>
+                    <p className="text-yellow-200/60 text-sm">Understand implications</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
+                    <h4 className="font-semibold text-yellow-200">Legal Advice</h4>
+                    <p className="text-yellow-200/60 text-sm">Know your rights</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
+                    <h4 className="font-semibold text-yellow-200">Mental Health</h4>
+                    <p className="text-yellow-200/60 text-sm">Get support</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -63,68 +79,29 @@ export default function Home() {
 
           <div className="mt-20">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-blue-300 mb-4">Skill Tree</h2>
-              <p className="text-blue-200/80">Unlock knowledge across multiple subjects</p>
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4">Key Features</h2>
+              <p className="text-yellow-200/80">Your companion for better decision making</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
-              {[
-                { title: "Mathematics", description: "From Algebra to Calculus" },
-                { title: "Sciences", description: "Physics, Chemistry, Biology" },
-                { title: "Essays", description: "Research & Writing" },
-                { title: "History", description: "World Events & Analysis" },
-                { title: "Literature", description: "Comprehension & Analysis" },
-                { title: "Programming", description: "Code & Development" }
-              ].map((item) => (
-                <div 
-                  key={item.title} 
-                  className="p-6 rounded-xl border border-blue-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-blue-400/40 transition-colors cursor-pointer group"
-                >
-                  <h3 className="font-semibold text-blue-300 group-hover:text-blue-200 mb-2">{item.title}</h3>
-                  <p className="text-sm text-blue-200/60">{item.description}</p>
-                </div>
-              ))}
+              <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
+                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">24/7 Guidance</h3>
+                <p className="text-sm text-yellow-200/60">Always here when you need advice</p>
+              </div>
+              <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
+                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">Safe Space</h3>
+                <p className="text-sm text-yellow-200/60">Judgment-free conversation</p>
+              </div>
+              <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
+                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">Smart Insights</h3>
+                <p className="text-sm text-yellow-200/60">AI-powered decision analysis</p>
+              </div>
             </div>
           </div>
         </main>
 
-        {/* Footer */}
-        <footer className="mt-20 border-t border-blue-500/20 pt-16 pb-8 relative">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Product</h3>
-              <ul className="space-y-3">
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Features</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Security</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Updates</span></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Support</h3>
-              <ul className="space-y-3">
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Help Center</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Community</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Contact</span></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Company</h3>
-              <ul className="space-y-3">
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">About</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Blog</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Partners</span></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Legal</h3>
-              <ul className="space-y-3">
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Privacy</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">Terms</span></li>
-                <li><span className="text-blue-200/70 hover:text-blue-200 cursor-pointer transition-colors">License</span></li>
-              </ul>
-            </div>
-          </div>
-          <div className="text-center text-blue-200/50 text-sm">
-            <p>&copy; 2025 Your AI Study Companion. All rights reserved.</p>
+        <footer className="mt-20 border-t border-yellow-500/20 pt-16 pb-8">
+          <div className="text-center text-yellow-200/50 text-sm">
+            <p>&copy; 2025 Decision Buddy - Your AI Decision Assistant. All rights reserved.</p>
           </div>
         </footer>
       </div>
