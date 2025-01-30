@@ -12,11 +12,18 @@ export default function Home() {
           <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
             Decision Buddy
           </h1>
-          <Link href="/chat">
-            <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
-              Start Chat
-            </Button>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/resources">
+              <Button variant="ghost" className="text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10">
+                Resources
+              </Button>
+            </Link>
+            <Link href="/chat">
+              <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
+                Start Chat
+              </Button>
+            </Link>
+          </div>
         </nav>
 
         <main className="py-20">
@@ -92,8 +99,8 @@ export default function Home() {
                 <p className="text-sm text-yellow-200/60">Judgment-free conversation</p>
               </div>
               <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
-                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">Smart Insights</h3>
-                <p className="text-sm text-yellow-200/60">AI-powered decision analysis</p>
+                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">Support Resources</h3>
+                <p className="text-sm text-yellow-200/60">Access to helpful resources</p>
               </div>
             </div>
           </div>
