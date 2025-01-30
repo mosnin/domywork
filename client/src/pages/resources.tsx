@@ -3,8 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 
+type ResourceItem = {
+  name: string;
+  description: string;
+  contact?: string;
+  website: string;
+}
+
+type ResourceCategory = {
+  category: string;
+  items: ResourceItem[];
+}
+
 export default function Resources() {
-  const resources = [
+  const resources: ResourceCategory[] = [
     {
       category: "Mental Health",
       items: [
