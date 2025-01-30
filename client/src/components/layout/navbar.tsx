@@ -48,7 +48,7 @@ export default function Navbar() {
     <nav className="container mx-auto px-4 py-6 relative flex justify-between items-center">
       <Link href="/">
         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
-          Decision Buddy
+          Good Choices
         </h1>
       </Link>
 
@@ -68,7 +68,7 @@ export default function Navbar() {
           className="w-64 bg-gray-900 border-yellow-500/20 p-0"
         >
           <SheetHeader className="px-4 py-4 border-b border-yellow-500/20">
-            <SheetTitle className="text-yellow-400">Decision Buddy</SheetTitle>
+            <SheetTitle className="text-yellow-400">Good Choices</SheetTitle>
           </SheetHeader>
           <div className="px-2 py-4">
             <NavLinks />

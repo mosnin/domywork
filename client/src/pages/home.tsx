@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
+import { ArrowRight, Brain, Heart, Shield } from "lucide-react";
 
 export default function Home() {
   return (
@@ -12,81 +13,56 @@ export default function Home() {
         <Navbar />
 
         <main className="py-20">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600">
-              Your AI Decision Assistant
+          {/* Hero Section */}
+          <div className="max-w-4xl mx-auto text-center mb-20">
+            <h1 className="text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600">
+              Make Better Choices
             </h1>
-            <p className="text-xl text-yellow-200/80 mb-12">
-              Navigate life's choices with confidence. Get guidance, understanding, and support for making better decisions.
+            <p className="text-xl text-yellow-200/80 mb-12 max-w-2xl mx-auto">
+              Your AI companion for navigating life's decisions with confidence. Get personalized guidance and support when you need it most.
             </p>
             <Link href="/chat">
-              <Button size="lg" className="text-lg px-8 py-6 bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl transform transition hover:scale-105">
-                Get Smart Advice
+              <Button 
+                size="lg" 
+                className="text-lg px-8 py-6 bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl transform transition hover:scale-105 group"
+              >
+                Start Your Journey
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 mt-20">
-            <div className="space-y-6 flex flex-col justify-center">
-              <h2 className="text-3xl font-bold text-yellow-300">How It Works</h2>
-              <div className="space-y-4">
-                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-yellow-500/20 backdrop-blur-sm">
-                  <div className="text-yellow-400 text-xl font-bold">01</div>
-                  <p className="text-yellow-100">Share your situation or dilemma</p>
-                </div>
-                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-yellow-500/20 backdrop-blur-sm">
-                  <div className="text-yellow-400 text-xl font-bold">02</div>
-                  <p className="text-yellow-100">Get instant AI-powered guidance</p>
-                </div>
-                <div className="flex gap-4 items-center p-4 rounded-xl bg-gray-800/50 border border-yellow-500/20 backdrop-blur-sm">
-                  <div className="text-yellow-400 text-xl font-bold">03</div>
-                  <p className="text-yellow-100">Make informed decisions</p>
-                </div>
-              </div>
+          {/* Features Section */}
+          <div className="grid md:grid-cols-3 gap-8 mb-20">
+            <div className="p-8 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:bg-gray-800/70 transition-all">
+              <Brain className="h-8 w-8 text-yellow-400 mb-4" />
+              <h3 className="text-xl font-semibold text-yellow-300 mb-3">AI-Powered Insight</h3>
+              <p className="text-yellow-200/70">Get intelligent analysis and personalized recommendations for your decisions</p>
             </div>
-            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-yellow-500/10 border border-yellow-500/20 bg-gray-900/50 backdrop-blur-sm p-8">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-yellow-300 mb-4">We Help With</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
-                    <h4 className="font-semibold text-yellow-200">Life Choices</h4>
-                    <p className="text-yellow-200/60 text-sm">Navigate important decisions</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
-                    <h4 className="font-semibold text-yellow-200">Consequences</h4>
-                    <p className="text-yellow-200/60 text-sm">Understand implications</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
-                    <h4 className="font-semibold text-yellow-200">Legal Advice</h4>
-                    <p className="text-yellow-200/60 text-sm">Know your rights</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-gray-800/50 border border-yellow-500/20">
-                    <h4 className="font-semibold text-yellow-200">Mental Health</h4>
-                    <p className="text-yellow-200/60 text-sm">Get support</p>
-                  </div>
-                </div>
-              </div>
+            <div className="p-8 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:bg-gray-800/70 transition-all">
+              <Heart className="h-8 w-8 text-yellow-400 mb-4" />
+              <h3 className="text-xl font-semibold text-yellow-300 mb-3">Emotional Support</h3>
+              <p className="text-yellow-200/70">Navigate difficult choices with empathetic guidance and understanding</p>
+            </div>
+            <div className="p-8 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:bg-gray-800/70 transition-all">
+              <Shield className="h-8 w-8 text-yellow-400 mb-4" />
+              <h3 className="text-xl font-semibold text-yellow-300 mb-3">Privacy First</h3>
+              <p className="text-yellow-200/70">Your conversations and data are always protected and secure</p>
             </div>
           </div>
 
-          <div className="mt-20">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-yellow-300 mb-4">Key Features</h2>
-              <p className="text-yellow-200/80">Your companion for better decision making</p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
-                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">24/7 Guidance</h3>
-                <p className="text-sm text-yellow-200/60">Always here when you need advice</p>
-              </div>
-              <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
-                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">Safe Space</h3>
-                <p className="text-sm text-yellow-200/60">Judgment-free conversation</p>
-              </div>
-              <div className="p-6 rounded-xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm hover:border-yellow-400/40 transition-colors cursor-pointer group">
-                <h3 className="font-semibold text-yellow-300 group-hover:text-yellow-200 mb-2">Support Resources</h3>
-                <p className="text-sm text-yellow-200/60">Access to helpful resources</p>
-              </div>
+          {/* CTA Section */}
+          <div className="text-center mb-20">
+            <div className="max-w-2xl mx-auto p-8 rounded-2xl border border-yellow-500/20 bg-gray-800/50 backdrop-blur-sm">
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4">Ready to Make Good Choices?</h2>
+              <p className="text-yellow-200/80 mb-6">
+                Join thousands of others who are making better decisions with AI guidance.
+              </p>
+              <Link href="/chat">
+                <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
+                  Get Started Now
+                </Button>
+              </Link>
             </div>
           </div>
         </main>

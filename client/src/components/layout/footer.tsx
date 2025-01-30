@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <h3 className="text-yellow-400 font-semibold mb-4">About Us</h3>
             <p className="text-yellow-200/60 text-sm">
-              Decision Buddy - Your AI-powered companion for making better decisions.
+              Good Choices - Your AI-powered companion for making better decisions.
             </p>
           </div>
           <div>
@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center text-yellow-200/50 text-sm border-t border-yellow-500/20 pt-8">
-          <p>&copy; 2025 Decision Buddy - Your AI Decision Assistant. All rights reserved.</p>
+          <p>&copy; 2025 Good Choices - Your AI Life Guide. All rights reserved.</p>
         </div>
       </div>
     </footer>
