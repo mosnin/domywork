@@ -76,6 +76,22 @@ export default function Resources() {
       <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
+        {/* Header Navigation */}
+        <nav className="container mx-auto px-4 py-6 relative flex justify-between items-center">
+          <Link href="/">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
+              Decision Buddy
+            </h1>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/chat">
+              <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
+                Start Chat
+              </Button>
+            </Link>
+          </div>
+        </nav>
+
         <div className="container mx-auto px-4 py-16 relative">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -130,6 +146,13 @@ export default function Resources() {
             </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="container mx-auto px-4 mt-20 border-t border-yellow-500/20 pt-16 pb-8">
+          <div className="text-center text-yellow-200/50 text-sm">
+            <p>&copy; 2025 Decision Buddy - Your AI Decision Assistant. All rights reserved.</p>
+          </div>
+        </footer>
       </div>
     </>
   );
