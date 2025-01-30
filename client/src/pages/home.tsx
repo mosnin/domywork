@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import Navbar from "@/components/layout/navbar";
 
 export default function Home() {
   return (
@@ -8,23 +9,7 @@ export default function Home() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
       <div className="container mx-auto px-4 relative">
-        <nav className="py-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
-            Decision Buddy
-          </h1>
-          <div className="flex items-center gap-4">
-            <Link href="/resources">
-              <Button variant="ghost" className="text-yellow-200 hover:text-yellow-400 hover:bg-yellow-500/10">
-                Resources
-              </Button>
-            </Link>
-            <Link href="/chat">
-              <Button className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-lg shadow-yellow-500/20 rounded-xl">
-                Start Chat
-              </Button>
-            </Link>
-          </div>
-        </nav>
+        <Navbar />
 
         <main className="py-20">
           <div className="max-w-4xl mx-auto text-center">
