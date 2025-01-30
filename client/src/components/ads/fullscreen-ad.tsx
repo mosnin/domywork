@@ -9,7 +9,7 @@ export default function FullscreenAd({ onClose }: FullscreenAdProps) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const duration = 10000;
+    const duration = 5000; 
     const interval = 100;
     const steps = duration / interval;
     let currentStep = 0;
@@ -36,7 +36,7 @@ export default function FullscreenAd({ onClose }: FullscreenAdProps) {
             <div className="aspect-video bg-muted rounded-md mb-4" />
             <Progress value={progress} className="mb-4" />
             <p className="text-sm text-muted-foreground text-center">
-              Please wait {Math.ceil((100 - progress) / 10)} seconds
+              Please wait {Math.ceil((100 - progress) / 20)} seconds
             </p>
           </div>
         </div>
