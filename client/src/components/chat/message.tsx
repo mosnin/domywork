@@ -61,22 +61,24 @@ export function Message({ message }: MessageProps) {
     <div
       className={cn(
         "flex w-full items-start gap-4 p-4",
-        isUser ? "bg-muted/50" : "bg-background"
+        isUser ? "bg-gray-800/50 border-y border-yellow-500/20" : "bg-black/20"
       )}
     >
       <div
         className={cn(
-          "size-8 rounded-full flex items-center justify-center",
-          isUser ? "bg-primary" : "bg-secondary"
+          "size-8 rounded-lg flex items-center justify-center border",
+          isUser 
+            ? "bg-yellow-500 text-black border-yellow-400" 
+            : "bg-gray-800 text-yellow-400 border-yellow-500/20"
         )}
       >
         {isUser ? "U" : "AI"}
       </div>
       <div className="flex-1">
-        <div className="text-sm font-medium mb-1">
+        <div className="text-sm font-medium mb-1 text-yellow-300">
           {isUser ? "You" : "Assistant"}
         </div>
-        <div className="text-sm whitespace-pre-wrap">
+        <div className="text-sm whitespace-pre-wrap text-yellow-100">
           {parseContent(message.content)}
         </div>
         {!isUser && (
@@ -84,7 +86,7 @@ export function Message({ message }: MessageProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="size-8"
+              className="size-8 hover:bg-yellow-500/10 hover:text-yellow-400"
               onClick={copyToClipboard}
             >
               <Copy className="size-4" />
@@ -92,7 +94,7 @@ export function Message({ message }: MessageProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="size-8"
+              className="size-8 hover:bg-yellow-500/10 hover:text-yellow-400"
               onClick={downloadAsText}
             >
               <Download className="size-4" />

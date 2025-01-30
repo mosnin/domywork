@@ -70,13 +70,21 @@ export default function Chat() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+      {/* Background gradient and grid pattern removed */}
 
       <div className="relative flex h-screen">
         <Sidebar onClearChat={clearChat} />
         <main className="flex-1 flex flex-col">
+          <div className="p-4 border-b border-yellow-500/20 bg-black/20 backdrop-blur-sm">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
+              Decision Buddy AI
+            </h1>
+            <p className="text-yellow-200/60 text-sm">
+              Your trusted companion for making better choices
+            </p>
+          </div>
           <MessageList messages={messages} isLoading={isLoading} />
-          <div className="border-t border-gray-800">
+          <div className="border-t border-yellow-500/20 bg-black/20 backdrop-blur-sm">
             <ChatInput onSend={handleNewMessage} disabled={isLoading || showAd} />
           </div>
         </main>
