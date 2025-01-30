@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* Cyberpunk-inspired header */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
       <div className="container mx-auto px-4 relative">
@@ -91,11 +91,7 @@ export default function Home() {
           </div>
         </main>
 
-        <footer className="mt-20 border-t border-yellow-500/20 pt-16 pb-8">
-          <div className="text-center text-yellow-200/50 text-sm">
-            <p>&copy; 2025 Decision Buddy - Your AI Decision Assistant. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );
